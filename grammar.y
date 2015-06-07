@@ -1,8 +1,10 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
+#include "Expr.h"
 int yylex(void);
 void yyerror(const char *msg);
+static void* mk_inval(int val);
 #define YYERROR_VERBOSE  1
 %}
 %token INT INPUT FUNCNAME
@@ -12,27 +14,24 @@ void yyerror(const char *msg);
 {
    int intval;
    char *strval;
-  // struct rval_expr* rval_expr;
+   Expr *expr;
 }
 %token<intval> INTVAL
 %token<strval> FUNCNAMEVAL
+%type <expr> expr
 %%
 
-program:
-program statement
-|
-;
 
 statement:
-     expr
+    statement expr
+    |
 ;
-expr:
-INTVAL { printf("int value: %d\n", $1);}
-| INPUT { ; }
-| expr '+' expr {  ; }
-| expr '-' expr {  ; }
-| '(' expr ')'  {  ;     }
-| FUNCNAMEVAL '(' expr ')'  {  printf("Function name: %s\n", $1); }
+expr: INTVAL { $$=0;}
+  | INPUT { ; }
+  | expr '+' expr {  ; }
+  | expr '-' expr {  ; }
+  | '(' expr ')'  {  ;     }
+  | FUNCNAMEVAL '(' expr ')'  {  printf("Function name: %s\n", $1); }
 ;
 
 %%
