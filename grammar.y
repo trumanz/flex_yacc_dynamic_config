@@ -7,6 +7,7 @@
 int yylex(void);
 void yyerror(const char *msg);
 static void* mk_inval(int val);
+int GetInput();
 #define YYERROR_VERBOSE  1
 %}
 %token INT INPUT FUNCNAME
@@ -29,12 +30,12 @@ statement:
     |
 ;
 expr: INTVAL { $$= new IntExpr($1);}
-  | INPUT { $$ = new IntExpr(10);}
+  | INPUT { $$ = new IntExpr(GetInput());}
   | expr '+' expr {  $$ = new AddExpr($1, $3); }
   | expr '-' expr {  $$ = new SubExpr($1, $3); }
   | '(' expr ')'  {  $$ = $2; }
   | FUNCNAMEVAL '(' expr ')' { 
-         FuncType* f =  SearchFunction($1);
+         FuncType* f =  FuncLoader::SearchFunction($1);
          if(f == NULL) { 
                char buf[100];
                snprintf(buf, sizeof(buf), "can not find function %s\n", $1);
