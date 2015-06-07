@@ -7,6 +7,14 @@ int yylex(void);
 %token INT INPUT FUNCNAME
 %left '+' '-'
 %left '*' '/'
+%union
+{
+   int intval;
+   char *strval;
+  // struct rval_expr* rval_expr;
+}
+%token<intval> INTVAL
+%token<strval> FUNCNAMEVAL
 %%
 
 program:
@@ -18,12 +26,12 @@ statement:
      expr
 ;
 expr:
-INT {  ;  }
+INTVAL { printf("int value: %d\n", $1);}
 | INPUT { ; }
 | expr '+' expr {  ; }
 | expr '-' expr {  ; }
 | '(' expr ')'  {  ;     }
-| FUNCNAME '(' expr ')'  { ; }
+| FUNCNAMEVAL '(' expr ')'  {  printf("Function name: %s\n", $1); }
 ;
 
 %%

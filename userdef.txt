@@ -1,1 +1,1 @@
-factorial($input+ extadd($input))
+factorial($input-1+extadd($input))
