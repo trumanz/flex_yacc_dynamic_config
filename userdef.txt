@@ -1,1 +1,2 @@
 factorial($input-1+extadd($input))
+1+2

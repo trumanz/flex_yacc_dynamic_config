@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Expr.h"
+#include "FuncLoader.h"
+#include "Executor.h"
 int yylex(void);
 void yyerror(const char *msg);
 static void* mk_inval(int val);
@@ -23,15 +25,25 @@ static void* mk_inval(int val);
 
 
 statement:
-    statement expr
+    statement expr { Executor::Add($2); } 
     |
 ;
-expr: INTVAL { $$=0;}
-  | INPUT { ; }
-  | expr '+' expr {  ; }
-  | expr '-' expr {  ; }
-  | '(' expr ')'  {  ;     }
-  | FUNCNAMEVAL '(' expr ')'  {  printf("Function name: %s\n", $1); }
+expr: INTVAL { $$= new IntExpr($1);}
+  | INPUT { $$ = new IntExpr(10);}
+  | expr '+' expr {  $$ = new AddExpr($1, $3); }
+  | expr '-' expr {  $$ = new SubExpr($1, $3); }
+  | '(' expr ')'  {  $$ = $2; }
+  | FUNCNAMEVAL '(' expr ')' { 
+         FuncType* f =  SearchFunction($1);
+         if(f == NULL) { 
+               char buf[100];
+               snprintf(buf, sizeof(buf), "can not find function %s\n", $1);
+               buf[sizeof(buf) -1 ] = '\0';
+               $$ = NULL;
+               yyerror(buf);
+         }
+         else  $$ = new FuncExpr(f, $3);
+      }
 ;
 
 %%

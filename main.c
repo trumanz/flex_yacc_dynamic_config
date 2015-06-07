@@ -1,8 +1,20 @@
 #include <stdio.h>
-void yyparse();
+#include "Executor.h"
+#include <list>
+
+std::list<Expr*> Executor::exprs;
+
+int yyparse();
 int main(void) {
-yyparse();
-return 0;
+  if(yyparse() != 0) {
+      printf("parse failed");
+      return -1;
+  }
+  for( std::list<Expr*>::iterator it  = Executor::exprs.begin();
+            it != Executor::exprs.end() ; it++) {
+     printf("valu %d\n", (*it)->getValue());
+  }
+  return 0;
 }
 
 void yyerror(const char *msg){
