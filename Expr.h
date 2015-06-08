@@ -1,6 +1,6 @@
 #ifndef __EXPR_H_
 #define __EXPR_H_
-#include "FuncLoader.h"
+#include "module_api.h"
 class Expr{
 public:
    virtual int getValue() = 0;
@@ -31,11 +31,13 @@ public:
 
 class FuncExpr : public Expr{
 public:
-   FuncExpr(FuncType *f, Expr *parameter){ this->f = f; this-> p = parameter;}
-   int getValue() { return this->f(p->getValue()); }
+   FuncExpr(api_function *f, Expr *parameter){ this->f = f; this-> p = parameter;}
+   int getValue() { 
+          int pval = p->getValue();
+          return this->f(pval); }
 protected:
    Expr* p;
-   FuncType *f;
+   api_function *f;
 };
 
 typedef Expr*  PExpr;

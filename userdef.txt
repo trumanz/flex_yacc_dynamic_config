@@ -1,3 +1,4 @@
-factorial($input-1+extadd($input))
+addten($input)
+factorial($input-1+addten($input))
 1+2
 factorial($input  + 1)

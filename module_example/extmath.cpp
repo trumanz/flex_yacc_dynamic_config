@@ -1,12 +1,13 @@
 #include "../module_api.h"
+#include "stdlib.h"
 static int factorial(int n);
 static int addten(int n);
 
 
-
-static struct module_api expotrs_api[] = {
+struct module_api expotrs_api[] = {
    {"factorial",  factorial },
-   {"addten",   addten }
+   {"addten",   addten },
+   {NULL,   NULL }
 };
 
 

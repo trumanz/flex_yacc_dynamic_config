@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Expr.h"
-#include "FuncLoader.h"
+#include "ModuleLoader.h"
 #include "Executor.h"
 int yylex(void);
 void yyerror(const char *msg);
@@ -35,13 +35,14 @@ expr: INTVAL { $$= new IntExpr($1);}
   | expr '-' expr {  $$ = new SubExpr($1, $3); }
   | '(' expr ')'  {  $$ = $2; }
   | FUNCNAMEVAL '(' expr ')' { 
-         FuncType* f =  FuncLoader::SearchFunction($1);
+         api_function* f =  ModuleLoader::SearchApi($1);
          if(f == NULL) { 
                char buf[100];
                snprintf(buf, sizeof(buf), "can not find function %s\n", $1);
                buf[sizeof(buf) -1 ] = '\0';
                $$ = NULL;
                yyerror(buf);
+               YYABORT;
          }
          else  $$ = new FuncExpr(f, $3);
       }

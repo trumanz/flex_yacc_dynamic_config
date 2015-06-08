@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Executor.h"
+#include "ModuleLoader.h"
 #include <list>
 
 std::list<Expr*> Executor::exprs;
@@ -9,6 +10,7 @@ int GetInput(){
    return 5;
 }
 int main(void) {
+  ModuleLoader::LoaderDynamicLibrary("./module_example/libextmath.so");
   if(yyparse() != 0) {
       printf("parse failed");
       return -1;
