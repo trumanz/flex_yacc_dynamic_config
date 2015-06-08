@@ -1,4 +1,6 @@
-addten($input)
-factorial($input-1+addten($input))
 1+2
+($input)
+addten($input)
+factorial($input  + 1)
+factorial($input-1+addten($input))
 factorial($input  + 1)

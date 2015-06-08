@@ -34,12 +34,12 @@ public:
    FuncExpr(api_function *f, Expr *parameter){ this->f = f; this-> p = parameter;}
    int getValue() { 
           int pval = p->getValue();
-          return this->f(pval); }
+          pval = f(pval);
+          return pval; }
 protected:
    Expr* p;
    api_function *f;
 };
 
-typedef Expr*  PExpr;
 
 #endif

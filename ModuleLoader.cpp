@@ -19,12 +19,14 @@ int  ModuleLoader::LoaderDynamicLibrary(const char *path){
    int i = 0;
    while(1){
        if(mapi[i].name == NULL) break;
-       printf("%s %p\n", mapi[i].name, mapi[i].api);
+       api_function* f = mapi[i].api;
+       const char *name = mapi[i].name;
        ModuleLoader::apis[mapi[i].name] = mapi[i].api;
-       printf("%d\n",mapi[i].api(3));
+       printf("%s %p\n", mapi[i].name, mapi[i].api);
+       printf("test call %d\n", f(3));
+       printf("test call %d\n", f(3));
        i++;
    }
-   dlclose(handle);
    return 0;
 }
 
