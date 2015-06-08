@@ -9,7 +9,11 @@ static int dummy(int par){
 static  FuncType* SearchFunction(const char *name){
    return dummy;
 }
-static int  LoaderDynamicLibrary(const char *path);
+static int  LoaderDynamicLibrary(const char *path){
+   handle = dlopen(path, RTLD_NOW);
+   mr = (mod_register_function)dlsym(handle, "mod_register");
+   dlclose(handle);
+}
 };
 
 #endif
