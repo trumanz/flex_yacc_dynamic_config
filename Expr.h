@@ -51,7 +51,7 @@ public:
        this->l = _l;
        this->r = _r;
    }
-   int getValue() { return l->getValue() < r->getValue() ? 0: 1;}
+   int getValue() { return l->getValue() < r->getValue() ? 1: 0;}
 };
 
 class ThanExpr : public Expr {
@@ -63,7 +63,7 @@ public:
        this->l = _l;
        this->r = _r;
    }
-   int getValue() { return l->getValue() > r->getValue() ? 0: 1;}
+   int getValue() { return l->getValue() > r->getValue() ? 1: 0;}
 };
 
 
