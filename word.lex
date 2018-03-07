@@ -12,7 +12,7 @@ FUNCNAME {LETTER}+
 %%
 {DECNUMBER} { yylval.intval = atoi(yytext);  return  INTVAL; }
 {FUNCNAME}  { yylval.strval = strdup(yytext); return FUNCNAMEVAL;}
-[\+\-\(\)]  { return yytext[0];}
+[\+\-\(\)\<\>]  { return yytext[0];}
 "$input"    { return INPUT;}
 %%
 

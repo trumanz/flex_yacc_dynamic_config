@@ -42,4 +42,29 @@ protected:
 };
 
 
+class LessExpr : public Expr {
+protected:
+   Expr* l;
+   Expr* r;
+public:
+   LessExpr(Expr* _l, Expr* _r){
+       this->l = _l;
+       this->r = _r;
+   }
+   int getValue() { return l->getValue() < r->getValue() ? 0: 1;}
+};
+
+class ThanExpr : public Expr {
+protected:
+   Expr* l;
+   Expr* r;
+public:
+   ThanExpr(Expr* _l, Expr* _r){
+       this->l = _l;
+       this->r = _r;
+   }
+   int getValue() { return l->getValue() > r->getValue() ? 0: 1;}
+};
+
+
 #endif
