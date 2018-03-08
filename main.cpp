@@ -24,7 +24,7 @@ int main(void) {
   
   for( std::list<Expr*>::iterator it  = Executor::exprs.begin();
             it != Executor::exprs.end() ; it++) {
-     printf("valu %d\n", (*it)->getValue());
+     printf("valu %s\n", (*it)->getValueAsStr().c_str());
   }
   return 0;
 }

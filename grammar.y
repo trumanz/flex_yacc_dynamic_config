@@ -20,12 +20,14 @@ int GetInput();
    int intval;
    char *strval;
    Expr *expr;
+   IntExpr *intexpr;
+   BoolExpr *boolexpr;
 }
 %token<intval> INTVAL
 %token<strval> FUNCNAMEVAL
-%type <expr> intexpr
-%type <expr> boolexpr
 %type <expr> expr
+%type <intexpr> intexpr
+%type <boolexpr> boolexpr
 %%
 
 
@@ -34,16 +36,18 @@ statement:
     |
 ;
 
-expr:  boolexpr | intexpr;
-
-boolexpr: intexpr '<' intexpr { $$ = new LessExpr($1, $3); }
- | intexpr '>' intexpr { $$ = new ThanExpr($1, $3); }
+expr:  boolexpr { $$ = $1;}
+      | intexpr  { $$ = $1;}
 ;
 
-intexpr: INTVAL { $$= new IntExpr($1);}
-  | INPUT { $$ = new IntExpr(GetInput());}
-  | intexpr '+' intexpr {  $$ = new AddExpr($1, $3); }
-  | intexpr '-' intexpr {  $$ = new SubExpr($1, $3); }
+boolexpr: intexpr '<' intexpr { $$ = new IntLessExpr($1, $3); }
+ | intexpr '>' intexpr { $$ = new IntThanExpr($1, $3); }
+;
+
+intexpr: INTVAL { $$= new NumIntExpr($1);}
+  | INPUT { $$ = new NumIntExpr(GetInput());}
+  | intexpr '+' intexpr {  $$ = new IntAddExpr($1, $3); }
+  | intexpr '-' intexpr {  $$ = new IntSubExpr($1, $3); }
   | '(' intexpr ')'  {  $$ = $2; }
   | FUNCNAMEVAL '(' intexpr ')' { 
          api_function* f =  ModuleLoader::SearchApi($1);

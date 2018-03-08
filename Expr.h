@@ -1,69 +1,95 @@
 #ifndef __EXPR_H_
 #define __EXPR_H_
 #include "module_api.h"
+#include <string>
+#include <sstream> 
+
 class Expr{
 public:
-   virtual int getValue() = 0;
+   virtual std::string getValueAsStr() = 0;
 };
 
 class IntExpr : public Expr{
 public:
-   IntExpr(int val) { this->val  = val;}
+   virtual int getValue() = 0;
+   virtual std::string getValueAsStr(){
+       std::stringstream ss;
+       ss << this->getValue();
+       return ss.str();
+   }
+};
+
+class BoolExpr : public Expr{
+public:
+   virtual bool getValue() = 0;
+   virtual std::string getValueAsStr(){
+       return this->getValue() ? "true" : "false";
+   }
+};
+
+
+class NumIntExpr : public IntExpr{
+public:
+   NumIntExpr(int val) { this->val  = val;}
    int getValue() { return val; }
 private:
    int val;
 };
 
-class AddExpr : public Expr {
-public:
-   AddExpr(Expr* l, Expr* r){ this->l = l;   this->r = r; }
-   int getValue() { return l->getValue() + r->getValue(); }
+class IntArithOper : public IntExpr{
 protected:
-   Expr* l;
-   Expr* r;
+   IntExpr* l;
+   IntExpr* r;
+   IntArithOper(IntExpr* _l, IntExpr* _r){ this->l = _l;   this->r = _r; }
 };
 
-class SubExpr : public AddExpr {
+class IntAddExpr : public IntArithOper {
 public:
-   SubExpr(Expr* l, Expr* r): AddExpr(l,r){}
+   IntAddExpr(IntExpr* l, IntExpr* r): IntArithOper(l,r){}
+   int getValue() { return l->getValue() + r->getValue(); }
+};
+
+class IntSubExpr : public IntArithOper {
+public:
+   IntSubExpr(IntExpr* l, IntExpr* r): IntArithOper(l,r){}
    int getValue() { return l->getValue() - r->getValue(); }
 };
 
-class FuncExpr : public Expr{
+class FuncExpr : public IntExpr{
 public:
-   FuncExpr(api_function *f, Expr *parameter){ this->f = f; this-> p = parameter;}
+   FuncExpr(api_function *f, IntExpr *parameter){ this->f = f; this-> p = parameter;}
    int getValue() { 
           int pval = p->getValue();
           pval = f(pval);
           return pval; }
 protected:
-   Expr* p;
+   IntExpr* p;
    api_function *f;
 };
 
 
-class LessExpr : public Expr {
+class IntLessExpr : public BoolExpr {
 protected:
-   Expr* l;
-   Expr* r;
+   IntExpr* l;
+   IntExpr* r;
 public:
-   LessExpr(Expr* _l, Expr* _r){
+   IntLessExpr(IntExpr* _l, IntExpr* _r){
        this->l = _l;
        this->r = _r;
    }
-   int getValue() { return l->getValue() < r->getValue() ? 1: 0;}
+   bool getValue() { return l->getValue() < r->getValue();}
 };
 
-class ThanExpr : public Expr {
+class IntThanExpr : public BoolExpr {
 protected:
-   Expr* l;
-   Expr* r;
+   IntExpr* l;
+   IntExpr* r;
 public:
-   ThanExpr(Expr* _l, Expr* _r){
+   IntThanExpr(IntExpr* _l, IntExpr* _r){
        this->l = _l;
        this->r = _r;
    }
-   int getValue() { return l->getValue() > r->getValue() ? 1: 0;}
+   bool getValue() { return l->getValue() > r->getValue();}
 };
 
 
