@@ -14,6 +14,7 @@ FUNCNAME {LETTER}+
 {FUNCNAME}  { yylval.strval = strdup(yytext); return FUNCNAMEVAL;}
 [\+\-\(\)\<\>]  { return yytext[0];}
 "$input"    { return INPUT;}
+"$int"    { return XINT;}
 %%
 
 int yywrap()

@@ -55,6 +55,13 @@ public:
    int getValue() { return l->getValue() - r->getValue(); }
 };
 
+class IntFromBoolExpr : public IntExpr {
+    BoolExpr* be;
+public:
+   IntFromBoolExpr(BoolExpr* _be) {this->be = _be;}
+   int getValue() { return be->getValue() ? 1 : 0; }
+};
+
 class FuncExpr : public IntExpr{
 public:
    FuncExpr(api_function *f, IntExpr *parameter){ this->f = f; this-> p = parameter;}

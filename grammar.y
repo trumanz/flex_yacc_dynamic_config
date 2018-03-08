@@ -10,7 +10,7 @@ static void* mk_inval(int val);
 int GetInput();
 #define YYERROR_VERBOSE  1
 %}
-%token INT INPUT FUNCNAME
+%token INT XINT INPUT FUNCNAME
 
 %left '<' '>'
 %left '+' '-'
@@ -61,6 +61,9 @@ intexpr: INTVAL { $$= new NumIntExpr($1);}
          }
          else  $$ = new FuncExpr(f, $3);
       }
+   | XINT '(' boolexpr ')' {
+         $$ = new IntFromBoolExpr($3);
+     }
 ;
 
 
