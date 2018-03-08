@@ -27,6 +27,18 @@ public:
    }
 };
 
+#if 0
+class TimeExpr : public Expr {
+public:
+   virtual boost::posix::time getValue() = 0;
+};
+
+class DurationExpr : public Expr {
+public:
+   virtual duration getValue() = 0;
+};
+
+#endif
 
 class NumIntExpr : public IntExpr{
 public:
